@@ -6,7 +6,7 @@
 /*   By: dasargsy <dasargsy@student.42yerevan.am    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:46:16 by dasargsy          #+#    #+#             */
-/*   Updated: 2024/03/15 13:39:25 by dasargsy         ###   ########.fr       */
+/*   Updated: 2025/05/04 20:57:28 by dasargsy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@
 # endif
 
 char	*get_next_line(int fd);
-size_t	ft_strlen(char *s);
+size_t	ft_strlen(const char *s);
 char	*ft_substr(char *s, unsigned int start, size_t len, int f);
 char	*ft_strjoin(char *s1, char *s2, int f, int f2);
 void	*ft_calloc(size_t num, size_t size);
-
 #endif

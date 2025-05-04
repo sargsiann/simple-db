@@ -2,15 +2,17 @@ NAME = simple-db
 
 CC = cc 
 
-CFLAGS = -Wall -Wextra -Werror 
+# CFLAGS = -Wall -Wextra -Werror 
 
 INCLUDES = includes
+
+DEPS = includes Makefile
 
 SRCS = $(shell find src -name "*.c")
 
 OBJS = $(SRCS:.c=.o)
 
-%.o : %.c
+%.o : %.c $(DEPS)
 	$(CC) $(CFLAGS) -I $(INCLUDES) -c $< -o $@
 
 all: $(NAME)

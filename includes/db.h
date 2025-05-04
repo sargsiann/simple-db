@@ -5,7 +5,9 @@
 
 #include "get_next_line.h"
 #include <stdbool.h>
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 // THE DATA TYPE IN OUR DATABASE
 
@@ -31,24 +33,16 @@ typedef struct s_db {
 }	t_db;
 
 
-// ENUM FOR QUERRY TYPES 
+// STRUCT FOR CREATE QUERRY
 
-typedef enum e_sql_query_type
-{
-    CREATE,
-    SELECT,
-    DELETE,
-    UPDATE,
-    INSERT,
-	DROP
-}   t_sql_query_type;
-
+typedef struct s_create_querry {
+	char 	*table_or_db;
+	int		capacity;
+}	t_create_querry;
 
 typedef struct s_select_squerry {
 	char	*column;
 	t_table	*table;
-	char	*order_by;
-	int		asc_or_desc;
 	int		limit;
 	char	*condition;
 }	t_select_querry;
@@ -69,6 +63,17 @@ typedef struct s_update_delete_querry {
 	char	**values_to_set;
 	char	*condition;
 }	t_update_querry;
+
+// FUNCTIONS
+
+void	prompt(t_db *db);
+char	**ft_split(char const *s, char c);
+void	print_mtx(char **mtx);
+void	parser(char *input, t_db *db);
+int		validation(char **strs);
+int		mtx_len(char **mtx);
+int		ft_strcmp(const char *s1, const char *s2);
+
 
 
 #endif
