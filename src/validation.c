@@ -4,7 +4,8 @@
 // INSERT +
 // UPDATE +
 // DELETE +
-// SHOW (showing all db if * else db)
+// SHOW (showing all db if * else db) + 
+
 
 // SELECT (in feature)
 
