@@ -61,30 +61,27 @@ static int validate_show(char **querry)
 
 static int validate_update(char **querry) 
 {
-	if (ft_strcmp(querry[1],"SET") != 0) {
-		write(2,"INVALID STRUCTURE OF UPDATE\n",29);
-		return 0;
-	}
-	if (!querry[2]) {
+	if (!querry[1]) {
 		write(2,"NO TABLE NAME PROVIDED\n",24);
 		return 0;
 	}
-	if (ft_strcmp(querry[3],"WHERE") != 0) {
+	if (ft_strcmp(querry[2],"VALUES") != 0) {
 		write(2,"INVALID STRUCTURE OF UPDATE\n",29);
 		return 0;
 	}
-	if (!querry[4]) {
-		write(2,"NO CONDITION PROVIDED\n",22);
-		return 0;
-	}
-	if (ft_strcmp(querry[5],"VALUES") != 0) {
-		write(2,"INVALID STRUCTURE OF UPDATE\n",29);
-		return 0;
-	}
-	if (!querry[6]) {
+	if (!querry[3]) {
 		write(2,"NO VALUES PROVIDED\n",20);
 		return 0;
 	}
+	if (ft_strcmp(querry[4],"WHERE") != 0) {
+		write(2,"INVALID STRUCTURE OF UPDATE\n",29);
+		return 0;
+	}
+	if (!querry[5]) {
+		write(2,"NO CONDITON PROVIDED\n",22);
+		return 0;
+	}
+	return 1;
 }
 
 static int	validate_insert(char **querry) {
@@ -113,7 +110,7 @@ int	validation(char **querry)
 		return (validate_create_done(querry));
 	if (ft_strcmp(querry[0],"INSERT") == 0)
 		return (validate_insert(querry));
-	if (ft_strcmp(querry[0],"UPDATE") == 0)
+	if (ft_strcmp(querry[0],"SET") == 0)
 		return (validate_update(querry));
 	if (ft_strcmp(querry[0],"DELETE") == 0)
 		return (validate_delete(querry));

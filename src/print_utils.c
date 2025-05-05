@@ -16,7 +16,10 @@ void	print_data(t_data *data, int index)
 {
 	printf("DATA %d\n", index);
 	printf("%f\n", data->value);
-	print_mtx(data->users);
+	for (int i = 0; data->users[i]; i++) {
+		printf("%s ",data->users[i]);
+	}
+	printf("\n");
 }
 
 void	print_datas(t_data **datas)
@@ -24,7 +27,7 @@ void	print_datas(t_data **datas)
 	int	i;
 
 	i = 0;
-	if (datas == NULL)
+	if (datas == NULL || *datas == NULL)
 	{
 		return ;
 	}

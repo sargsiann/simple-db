@@ -3,8 +3,10 @@
 // CREATE DB, TABLE + 
 // DROP DB, TABLE WHERE ID == +
 // INSERT INTO TABLE (ID) VALUES VALUE,USER1,USER2 + 
-// DELETE FROM TABLE WHERE ID == 
+// DELETE FROM TABLE WHERE ID == +
 // UPDATE FROM TABLE WHERE ID == VALUES (VALUE, USERS)
+// SHOW (TABLE_ID) OR *(ALL)
+// SAVE (NAME OF FILE)
 
 void	create_database(t_db **db, char *name) {
 	if ((*db) != NULL)
@@ -121,6 +123,85 @@ void	insert_to_table(t_db **db, int id, char *v)
 	table->size++;
 }
 
+void	delete_from_table(t_db **db, int table_id, int data_id)
+{
+	if (!*db) {
+		write(2, "NO DATABASE SELECTED\n", 22);
+		return;
+	}
+	if (table_id < 0 || table_id >= (*db)->size) {
+		write(2, "TABLE ID OUT OF RANGE\n", 23);
+		return;
+	}
+
+	t_table *table = (*db)->tables[table_id];
+	if (data_id < 0 || data_id >= table->size) {
+		write(2, "DATA ID OUT OF RANGE\n", 22);
+		return;
+	}
+
+	free(table->datas[data_id]);
+
+	if (table->size == 1) {
+		free(table->datas);
+		table->datas = NULL;
+		table->size = 0;
+		return;
+	}
+
+	t_data **new_datas = malloc(sizeof(t_data *) * (table->size - 1));
+	if (!new_datas)
+		return;
+
+	int j = 0;
+	for (int i = 0; i < table->size; i++) {
+		if (i == data_id)
+			continue;
+		new_datas[j++] = table->datas[i];
+	}
+
+	free(table->datas);
+	table->datas = new_datas;
+	table->size--;
+}
+
+void	update_in_table(t_db **db, int table_id, int data_id, char *v)
+{
+	if (!*db) {
+		write(2, "NO DATABASE SELECTED\n", 22);
+		return;
+	}
+	if (table_id < 0 || table_id >= (*db)->size) {
+		write(2, "TABLE ID OUT OF RANGE\n", 23);
+		return;
+	}
+
+	t_table *table = (*db)->tables[table_id];
+	if (data_id < 0 || data_id >= table->size) {
+		write(2, "DATA ID OUT OF RANGE\n", 22);
+		return;
+	}
+
+	char **values = ft_split(v, ',');
+	if (!values)
+		return;
+
+	t_data *old_data = table->datas[data_id];
+	free(old_data);
+
+	t_data *new_data = malloc(sizeof(t_data));
+	if (!new_data)
+		return;
+
+	new_data->value = atof(values[0]);
+	new_data->users = values + 1;
+
+	table->datas[data_id] = new_data;
+}
+
+
+
+
 void	exec(char **querry, t_db **db) {
 	if (ft_strcmp(querry[0],"CREATE") == 0) 
 	{
@@ -137,5 +218,10 @@ void	exec(char **querry, t_db **db) {
 	}
 	if (ft_strcmp(querry[0],"INSERT") == 0)
 		insert_to_table(db,atoi(querry[2]),querry[4]);
+	if (ft_strcmp(querry[0], "DELETE") == 0)
+		delete_from_table(db, atoi(querry[2]), atoi(querry[6]));
+	if (ft_strcmp(querry[0], "SET") == 0)
+		update_in_table(db, atoi(querry[1]), atoi(querry[7]), querry[3]);
+	
 	print_db(*db);
 }
