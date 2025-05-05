@@ -3,7 +3,7 @@
 void	prompt() 
 {
 	char	*input = NULL;
-	t_db	*db = NULL;
+	t_db	**db = malloc(sizeof(t_db *));
 
 
 	while (1)
@@ -18,6 +18,6 @@ void	prompt()
 		// FOR DB SAVEING TO FILE
 		if (ft_strcmp(input, "save") == 0)
 			;
-		db = parser(input);
+		parser(input,db);
 	}
 }

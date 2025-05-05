@@ -51,6 +51,8 @@ void	free_tables(t_db *db)
 	int i;
 
 	i = 0;
+	if (db->tables == NULL)
+		return ;
 	while (i < db->size)
 	{
 		free_table(db->tables[i]);

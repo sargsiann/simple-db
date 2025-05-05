@@ -109,7 +109,6 @@ static int	validate_insert(char **querry) {
 
 int	validation(char **querry) 
 {
-	print_mtx(querry);
 	if (ft_strcmp(querry[0],"CREATE") == 0 || ft_strcmp(querry[0],"DROP") == 0)
 		return (validate_create_done(querry));
 	if (ft_strcmp(querry[0],"INSERT") == 0)
