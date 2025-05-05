@@ -24,11 +24,21 @@ void	print_datas(t_data **datas)
 	int	i;
 
 	i = 0;
+	if (datas == NULL)
+	{
+		return ;
+	}
+	printf("%s",BLUE);
+	printf("------------------------\n");
+	printf("%s",RESET);
 	while (datas[i])
 	{
 		print_data(datas[i], i);
 		i++;
 	}
+	printf("%s",BLUE);
+	printf("------------------------\n");
+	printf("%s",RESET);
 }
 
 
@@ -37,16 +47,13 @@ void	print_table_data(t_table *table)
 	int	i;
 
 	i = 0;
+	
 	printf("%s",RED);
 	printf("------------------------\n");
 	printf("%s",RESET);
 	printf("TABLE %s\n", table->name);
 	printf("TABLE SIZE %d\n", table->size);
-	while (i < table->size)
-	{
-		print_data(table->datas[i], i);
-		i++;
-	}
+	print_datas(table->datas);
 	printf("%s",RED);
 	printf("------------------------\n");
 	printf("%s",RESET);
@@ -66,7 +73,7 @@ void	print_db(t_db *db)
 	printf("%s",GREEN);
 	printf("------------------------\n");
 	printf("%s",RESET);
-	printf("DB %s\n", db->name);
+	printf("DB NAME %s\n", db->name);
 	printf("DB SIZE %d\n", db->size);
 	while (i < db->size)
 	{

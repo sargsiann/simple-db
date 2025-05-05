@@ -4,6 +4,7 @@
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"
 # define YELLOW "\x1b[33m"
+# define BLUE "\x1b[34m"
 # define RESET "\x1b[0m"
 // INCLUDES
 
@@ -87,8 +88,8 @@ void	free_mtx(char **mtx);
 void	free_datas(t_data **data);
 void	free_table(t_table *table);
 void	free_tables(t_db *db);
-void	create_table(char **querry, t_db **db);
-void	create_database(char **querry, t_db **db);
+void	create_table(t_db **db, char *name);
+void	create_database(t_db **db, char *name);
 void	exec(char **querry, t_db **db);
 void	print_data(t_data *data, int index);
 void	print_datas(t_data **datas);

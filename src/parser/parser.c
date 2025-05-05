@@ -19,8 +19,10 @@ t_db	*parser(char *input, t_db **db)
 		return NULL;
 	}
 	
-
 	exec(querry, db);
+
+	// print_db(*db);
+	
 	// FREEING MEMORY
 	free(input);
 	free_mtx(querry);

@@ -15,6 +15,10 @@ void	prompt()
 			free(input);
 			break ;
 		}
+		if (ft_strcmp(input,"\n") == 0) {
+			free(input);
+			continue;
+		}
 		// FOR DB SAVEING TO FILE
 		if (ft_strcmp(input, "save") == 0)
 			;
