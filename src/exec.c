@@ -21,6 +21,57 @@ void	create_database(t_db **db, char *name) {
 	(*db)->name = strdup(name);
 }
 
+void	show_table(t_db **db, char *arg)
+{
+	if (!*db) {
+		write(2, "NO DATABASE SELECTED\n", 22);
+		return;
+	}
+
+	if (ft_strcmp(arg, "*") == 0) 
+		print_db(*db);	
+	else 
+		print_table_data((*db)->tables[atoi(arg)]);
+}
+
+void	save_db_to_file(char *filename, t_db *db) 
+{
+	if (!db) {
+		write(2, "NO DATABASE TO SAVE\n", 21);
+		return;
+	}
+
+	FILE *file = fopen(filename, "w");
+	if (!file) {
+		perror("fopen");
+		return;
+	}
+
+	fprintf(file, "DB_NAME:%s\n", db->name);
+	fprintf(file, "TABLE_COUNT:%d\n", db->size);
+
+	for (int i = 0; i < db->size; i++) {
+		t_table *table = db->tables[i];
+		fprintf(file, "TABLE_NAME:%s\n", table->name);
+		fprintf(file, "DATA_COUNT:%d\n", table->size);
+
+		for (int j = 0; j < table->size; j++) {
+			t_data *data = table->datas[j];
+			fprintf(file, "VALUE:%.2f", data->value);
+			if (data->users) {
+				for (int k = 0; data->users[k]; k++) {
+					fprintf(file, ",%s", data->users[k]);
+				}
+			}
+			fprintf(file, "\n");
+		}
+	}
+
+	fclose(file);
+}
+
+
+
 void	create_table(t_db **db, char *name) 
 {
 	if (*db == NULL) {
@@ -222,6 +273,9 @@ void	exec(char **querry, t_db **db) {
 		delete_from_table(db, atoi(querry[2]), atoi(querry[6]));
 	if (ft_strcmp(querry[0], "SET") == 0)
 		update_in_table(db, atoi(querry[1]), atoi(querry[7]), querry[3]);
-	
+	if (ft_strcmp(querry[0],"SHOW") == 0)
+		show_table(db,querry[1]);
+	if (ft_strcmp(querry[0],"SAVE") == 0)
+		save_db_to_file(querry[1],*db);
 	print_db(*db);
 }

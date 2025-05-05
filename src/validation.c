@@ -116,6 +116,8 @@ int	validation(char **querry)
 		return (validate_delete(querry));
 	if (ft_strcmp(querry[0],"SHOW") == 0)
 		return (validate_show(querry));
+	if (ft_strcmp(querry[0],"SAVE") == 0)
+		return 1;
 	write(2,"INVALID QUERRY\n",16);
 	return (0);
 }
