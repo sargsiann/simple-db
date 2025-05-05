@@ -41,7 +41,8 @@ void	free_table(t_table *table)
 	int i;
 
 	i = 0;
-	free_datas(table->datas);
+	if (table->datas != NULL)
+		free_datas(table->datas);
 	free(table->name);
 	free(table);
 }

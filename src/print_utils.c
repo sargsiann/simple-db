@@ -57,6 +57,11 @@ void	print_db(t_db *db)
 	int	i;
 
 	i = 0;
+	if (db == NULL)
+	{
+		printf("NO DB SELECTED\n");
+		return ;
+	}
 	printf("%s",GREEN);
 	printf("------------------------\n");
 	printf("%s",RESET);
