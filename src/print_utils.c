@@ -31,6 +31,7 @@ void	print_datas(t_data **datas)
 	}
 }
 
+
 void	print_table_data(t_table *table)
 {
 	int	i;
