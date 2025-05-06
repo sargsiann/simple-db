@@ -1,7 +1,8 @@
 #include "db.h"
 
-static int	data_index = 0;
-static int	table_index = 0;
+static int	data_index = -1;
+static int	table_index = -1;
+
 
 void	init_db(t_db **db, char *input) 
 {
@@ -21,12 +22,24 @@ void	init_db(t_db **db, char *input)
 		(*db)->tables = malloc(sizeof(t_table *) * (*db)->size);
 	}
 	else if (ft_strncmp(input,"TABLE_NAME:",11) == 0) {
-		data_index = 0;
-		(*db)->tables[table_index] = malloc(sizeof(t_table));
+		table_index++;
+		data_index = -1;
+		(*db)->tables[table_index] = malloc(sizeof(t_table));	
 		(*db)->tables[table_index]->capacity = 1024;
 		(*db)->tables[table_index]->size = 0;
 		(*db)->tables[table_index]->name = ft_substr(strdup(input + 11),0,ft_strlen(input + 11) - 1,1);
-		table_index++;
+	}
+	else if (ft_strncmp(input,"DATA_COUNT:",11) == 0) {
+		int	size = atoi(input + 11);
+		(*db)->tables[table_index]->size = size;
+		(*db)->tables[table_index]->datas = malloc(sizeof(t_data *) * size);
+	}
+	else if (ft_strncmp(input,"VALUE:",6) == 0) {
+		t_data *d = malloc(sizeof(t_data));
+		d->value = atof(input + 6);
+		d->users = ft_split(input + 6,',') + 1;
+		data_index++;
+		(*db)->tables[table_index]->datas[data_index] = d;
 	}
 }
 
