@@ -77,9 +77,10 @@ typedef struct s_update_delete_querry {
 
 // FUNCTIONS
 
-void	prompt();
+void	prompt(char **argv);
 char	**ft_split(char const *s, char c);
 void	print_mtx(char **mtx);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 t_db	*parser(char *input, t_db **db);
 int		validation(char **strs);
 int		mtx_len(char **mtx);
@@ -95,5 +96,6 @@ void	print_data(t_data *data, int index);
 void	print_datas(t_data **datas);
 void	print_table_data(t_table *table);
 void	print_db(t_db *db);
+void	get_db_info(t_db **db, char *db_file);
 
 #endif

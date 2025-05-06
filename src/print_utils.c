@@ -78,7 +78,7 @@ void	print_db(t_db *db)
 	printf("%s",RESET);
 	printf("DB NAME %s\n", db->name);
 	printf("DB SIZE %d\n", db->size);
-	while (i < db->size)
+	while (i < db->size && db->tables)
 	{
 		print_table_data(db->tables[i]);
 		i++;

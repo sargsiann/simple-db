@@ -20,8 +20,6 @@ t_db	*parser(char *input, t_db **db)
 	}
 	
 	exec(querry, db);
-
-	// print_db(*db);
 	
 	// FREEING MEMORY
 	free(input);

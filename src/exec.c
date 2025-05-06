@@ -41,6 +41,11 @@ void	save_db_to_file(char *filename, t_db *db)
 		return;
 	}
 
+	if (!db->tables || db->size == 0) {
+		write(2, "NO TABLES TO SAVE\n", 18);
+		return;
+	}
+
 	FILE *file = fopen(filename, "w");
 	if (!file) {
 		perror("fopen");
@@ -52,11 +57,18 @@ void	save_db_to_file(char *filename, t_db *db)
 
 	for (int i = 0; i < db->size; i++) {
 		t_table *table = db->tables[i];
+		if (!table) continue;
+
 		fprintf(file, "TABLE_NAME:%s\n", table->name);
 		fprintf(file, "DATA_COUNT:%d\n", table->size);
 
+		if (!table->datas || table->size == 0)
+			continue;
+
 		for (int j = 0; j < table->size; j++) {
 			t_data *data = table->datas[j];
+			if (!data) continue;
+
 			fprintf(file, "VALUE:%.2f", data->value);
 			if (data->users) {
 				for (int k = 0; data->users[k]; k++) {
@@ -69,7 +81,6 @@ void	save_db_to_file(char *filename, t_db *db)
 
 	fclose(file);
 }
-
 
 
 void	create_table(t_db **db, char *name) 
