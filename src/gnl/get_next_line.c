@@ -6,7 +6,7 @@
 /*   By: dasargsy <dasargsy@student.42yerevan.am    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:42:14 by dasargsy          #+#    #+#             */
-/*   Updated: 2025/05/06 19:47:26 by dasargsy         ###   ########.fr       */
+/*   Updated: 2025/05/09 23:03:43 by dasargsy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ long long	find_newline(char *readed)
 
 char	*get_st_char(char *readed, char *s)
 {
-	char		*st_char;
+	char		*st_char = NULL;
 
 	if (readed == NULL)
 	{

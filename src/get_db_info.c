@@ -1,5 +1,6 @@
 #include "db.h"
 
+// WE GOT TWO STATIC VARIABLES TO NOT LOST VALUES AFTER FUNC CALL
 static int	data_index = -1;
 static int	table_index = -1;
 
@@ -8,6 +9,7 @@ void	init_db(t_db **db, char *input)
 {
 	if (!input)
 		return ;
+	// DB_NAME LINE SAYS WE GOT DB ITS NAME 
 	if (ft_strncmp(input,"DB_NAME:",8) == 0)
 	{
 		(*db) = malloc(sizeof(t_db));
@@ -18,11 +20,14 @@ void	init_db(t_db **db, char *input)
 	}
 	else if (ft_strncmp(input,"TABLE_COUNT:",12) == 0)
 	{
+		// INITING SIZE AND TABLES ARRAY BY TABLE COUNT
 		(*db)->size = atoi(input + 12);
 		(*db)->tables = malloc(sizeof(t_table *) * (*db)->size);
 	}
 	else if (ft_strncmp(input,"TABLE_NAME:",11) == 0) {
+		// INCREMENTING TABLE_INDEX TO KNOW WHAT TABLE ARE WE IN FOR STORING DATAS EACH TIME WE HAVE TABLE NAME WE INCREMENT INDEX
 		table_index++;
+		// RESETING DATA INDEX BECAUSE EVERY TABLE STARTS FROM 0 INDEX
 		data_index = -1;
 		(*db)->tables[table_index] = malloc(sizeof(t_table));	
 		(*db)->tables[table_index]->capacity = 1024;
@@ -30,14 +35,22 @@ void	init_db(t_db **db, char *input)
 		(*db)->tables[table_index]->name = ft_substr(strdup(input + 11),0,ft_strlen(input + 11) - 1,1);
 	}
 	else if (ft_strncmp(input,"DATA_COUNT:",11) == 0) {
+
+		// GETTING DATA ARRAY FOR EXACT TABLE IN OUR TABLES ARRAY
 		int	size = atoi(input + 11);
 		(*db)->tables[table_index]->size = size;
 		(*db)->tables[table_index]->datas = malloc(sizeof(t_data *) * size);
 	}
 	else if (ft_strncmp(input,"VALUE:",6) == 0) {
+
+		// INITING VALUE FOR EXACT DATA OF EXACT TABLE AND INCREMENTING DATA INDEX
 		t_data *d = malloc(sizeof(t_data));
-		d->value = atof(input + 6);
-		d->users = ft_split(input + 6,',') + 1;
+
+		// PART OF CODE FOR RIGHT MEM MENEGMENT
+		char **users = ft_split(input + 6,',');
+
+		free_mtx(users);
+
 		data_index++;
 		(*db)->tables[table_index]->datas[data_index] = d;
 	}
@@ -59,12 +72,16 @@ void	get_db_info(t_db **db, char *db_file)
 	while (1)
 	{
 		input = get_next_line(fd);
+
+		// IF WE GOT TO END BREAKING
 		if (!input)
 			break;
-		printf("%s",input);
+
+		// INITING DB BY EACH LINE IN FILE (SPECIFIED OUR FORMAT)
 		init_db(db,input);
+
+		// FREE IN EACH LINE 
 		free(input);
 	}
-	print_db(*db);
 	close(fd);
 }

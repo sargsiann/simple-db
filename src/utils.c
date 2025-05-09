@@ -23,14 +23,14 @@ void	free_mtx(char **mtx)
 	free(mtx);
 }
 
-void	free_datas(t_data **data) {
+void	free_datas(t_data **data, int size) {
 	int i;
 
 	i = 0;
-	while (data[i])
+	while (i < size)
 	{
-		free(data[i]);
 		free_mtx(data[i]->users);
+		free(data[i]);
 		i++;
 	}
 	free(data);
@@ -38,33 +38,21 @@ void	free_datas(t_data **data) {
 
 void	free_table(t_table *table)
 {
-	int i;
-
-	i = 0;
 	if (table->datas != NULL)
-		free_datas(table->datas);
+		free_datas(table->datas, table->size);
 	free(table->name);
 	free(table);
 }
 
 void	free_tables(t_db *db)
 {
-	int i;
-
-	i = 0;
 	if (db->tables == NULL)
 		return ;
+	int i = 0;
 	while (i < db->size)
 	{
 		free_table(db->tables[i]);
 		i++;
 	}
 	free(db->tables);
-}
-
-void	free_db(t_db *db)
-{
-	free(db->name);
-	free_tables(db);
-	free(db);
 }

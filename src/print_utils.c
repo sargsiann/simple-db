@@ -19,10 +19,10 @@ void	print_data(t_data *data, int index)
 	for (int i = 0; data->users[i]; i++) {
 		printf("%s ",data->users[i]);
 	}
-	printf("\n");
+	printf("\n\n");
 }
 
-void	print_datas(t_data **datas)
+void	print_datas(t_data **datas, int size)
 {
 	int	i;
 
@@ -34,7 +34,7 @@ void	print_datas(t_data **datas)
 	printf("%s",BLUE);
 	printf("------------------------\n");
 	printf("%s",RESET);
-	while (datas[i])
+	while (i < size)
 	{
 		print_data(datas[i], i);
 		i++;
@@ -45,18 +45,14 @@ void	print_datas(t_data **datas)
 }
 
 
-void	print_table_data(t_table *table)
-{
-	int	i;
-
-	i = 0;
-	
+void	print_table_data(t_table *table, int index)
+{	
 	printf("%s",RED);
 	printf("------------------------\n");
 	printf("%s",RESET);
-	printf("TABLE %s\n", table->name);
+	printf("TABLE %d %s\n",index, table->name);
 	printf("TABLE SIZE %d\n", table->size);
-	print_datas(table->datas);
+	print_datas(table->datas, table->size);
 	printf("%s",RED);
 	printf("------------------------\n");
 	printf("%s",RESET);
@@ -80,7 +76,7 @@ void	print_db(t_db *db)
 	printf("DB SIZE %d\n", db->size);
 	while (i < db->size && db->tables)
 	{
-		print_table_data(db->tables[i]);
+		print_table_data(db->tables[i], i);
 		i++;
 	}
 	printf("%s",GREEN);

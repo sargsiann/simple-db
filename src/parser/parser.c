@@ -1,14 +1,19 @@
 #include "db.h"
 
-t_db	*parser(char *input, t_db **db) 
+void	parser(char *input, t_db **db) 
 {
 	// DELETING \N FROM INPUT
 	input = ft_substr(input, 0, ft_strlen(input) - 1,1);
 	
-	if (!input)
-		return NULL;
-	
-		// SPLITTING INPUT
+	// CHECKING EXIT COMMAND
+
+	if (ft_strcmp(input,"EXIT") == 0)
+	{
+		free(input);
+		cleanup(db,1);
+	}
+
+	// SPLITTING INPUT
 	char	**querry = ft_split(input, ' ');
 	
 	// VALIDATING INPUT
@@ -16,7 +21,7 @@ t_db	*parser(char *input, t_db **db)
 	{
 		free(input);
 		free_mtx(querry);
-		return NULL;
+		return ;
 	}
 	
 	exec(querry, db);
