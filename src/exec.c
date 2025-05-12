@@ -9,6 +9,7 @@
 // SAVE (NAME OF FILE) + 
 
 // CREATING DB
+
 void	create_database(t_db **db, char *name) {
 	// IF WE HAVE DB SELECTED WE CANT CREATE ANOTHER ONE
 	if ((*db) != NULL)
@@ -26,7 +27,7 @@ void	create_database(t_db **db, char *name) {
 
 void	show_table(t_db **db, char *arg)
 {
-	if (!*db) {
+	if (!db || !*db) {
 		write(2, "NO DATABASE SELECTED\n", 22);
 		return;
 	}
@@ -89,7 +90,7 @@ void	save_db_to_file(char *filename, t_db *db)
 void	create_table(t_db **db, char *name) 
 {
 	// IF WE DONT HAVE DB CANT CREATE TABLE
-	if (*db == NULL) {
+	if (db == NULL || *db == NULL) {
 		write(2, "NO DATABASE SELECTED\n", 22);
 		return;
 	}
@@ -128,10 +129,7 @@ void	drop_db(t_db **db, char *name)
 		return ;
 	}
 	// ELSE DROPING 
-	free((*db)->name);
-	free_tables((*db));
-	free((*db));
-	*db = NULL;
+	cleanup(db,0);
 }
 
 void	drop_table(t_db **db, int id) 
@@ -147,6 +145,10 @@ void	drop_table(t_db **db, int id)
 	}
 
 	// CREATING NEW ARRAY BY ONE SIZE LOWER
+	if ((*db)->size - 1 < 0) {
+		free_tables((*db));
+		return ;
+	}
 	t_table **new_tables = malloc(sizeof(t_table *) * ((*db)->size - 1));
 	if (!new_tables)
 		return;
@@ -156,8 +158,7 @@ void	drop_table(t_db **db, int id)
 	for (int i = 0; i < (*db)->size; i++) {
 		// WHEN WE GOT TO THAT EXACT ID WE SKIP
 		if (i == id) {
-			free((*db)->tables[i]->name);
-			free((*db)->tables[i]);
+			free_table((*db)->tables[i]);
 			continue;
 		}
 		new_tables[j++] = (*db)->tables[i];
@@ -180,12 +181,16 @@ void	insert_to_table(t_db **db, int id, char *v)
 		return;
 	}
 
-	// SPLITING VALUES FIRST ONE IS FLOAT VALUE OTHER IS USERS TO BE ASSIGNED
-	char **values = ft_split(v, ',');
 
 	t_data *data = malloc(sizeof(t_data));
-	data->value = atof(values[0]);
-	data->users = values + 1;
+	data->value = atof(v);
+
+	// GOING TO USERS PART AND GETTING USERS
+	int i = 0;
+	for (;v[i] && v[i] != ',';i++)
+			;
+	data->users = ft_split(v + i + 1,',');
+
 
 	t_table *table = (*db)->tables[id];
 
@@ -224,16 +229,17 @@ void	delete_from_table(t_db **db, int table_id, int data_id)
 		return;
 	}
 
-	free(table->datas[data_id]);
 
 	// IF OUR SIZE IS ONE JUST PUTTING NULL TO IT
 	if (table->size == 1) {
 		free_datas(table->datas, table->size);
-		free(table->datas);
 		table->datas = NULL;
 		table->size = 0;
 		return;
 	}
+
+	free_mtx(table->datas[data_id]->users);
+	free(table->datas[data_id]);
 
 	// ELSE CREATING NEW DATAS BY ONE SIZE LOWER
 	t_data **new_datas = malloc(sizeof(t_data *) * (table->size - 1));
@@ -270,21 +276,14 @@ void	update_in_table(t_db **db, int table_id, int data_id, char *v)
 		return;
 	}
 
-	char **values = ft_split(v, ',');
-	if (!values)
-		return;
 
-	t_data *old_data = table->datas[data_id];
-	free(old_data);
-
-	t_data *new_data = malloc(sizeof(t_data));
-	if (!new_data)
-		return;
-
-	new_data->value = atof(values[0]);
-	new_data->users = values + 1;
-
-	table->datas[data_id] = new_data;
+	t_data *data = table->datas[data_id];
+	int i = 0;
+	for (;v[i] && v[i] != ',';i++)
+				;
+	data->value = atof(v);
+	free_mtx(data->users);
+	data->users = ft_split(v + i + 1,',');
 }
 
 // AFTER VALIDATION IT COMES TO EXECUTION

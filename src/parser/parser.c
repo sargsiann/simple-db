@@ -3,14 +3,15 @@
 void	parser(char *input, t_db **db) 
 {
 	// DELETING \N FROM INPUT
-	input = ft_substr(input, 0, ft_strlen(input) - 1,1);
+	input = ft_substr(input, 0, ft_strlen(input) - 1,0);
 	
 	// CHECKING EXIT COMMAND
 
 	if (ft_strcmp(input,"EXIT") == 0)
 	{
 		free(input);
-		cleanup(db,1);
+		if (db != NULL)
+			cleanup(db,1);
 	}
 
 	// SPLITTING INPUT

@@ -47,10 +47,16 @@ void	init_db(t_db **db, char *input)
 		t_data *d = malloc(sizeof(t_data));
 
 		// PART OF CODE FOR RIGHT MEM MENEGMENT
-		char **users = ft_split(input + 6,',');
 
-		free_mtx(users);
+		d->value = atof(input + 6);
 
+		// GETING THE ADDRESS OF SECOND , BYTES FOR GETING USERS MTX
+		int i = 0;
+		for (;input[6 + i] && input[6 + i] != ',';i++)
+			;
+		d->users = ft_split(input + 7 + i,',');
+
+		// INCREASING INDEX FOR NEXT DATA HANDLING
 		data_index++;
 		(*db)->tables[table_index]->datas[data_index] = d;
 	}
